@@ -1,0 +1,23 @@
+1.  - Model Konvensional: Decision Tree
+    - Model Ensemble Bagging: Random Forest
+    - Model Ensemble Voting : Logistic Regression, KNN, dan Decision Tree
+
+
+2.  - Model Konvensional: Logistic Regression 
+    - Model Ensemble Bagging: Random Forest
+    - Model Ensemble Voting : LR, KNN, dan SVC
+
+3.  - Model Konvensional: Decision Tree
+    - Model Ensemble Bagging: Random Forest
+    - Model Ensemble Voting : Logistic Regression, KNN, dan Decision Tree
+    - Cross-Vold 5x
+
+4.  - Model Konvensional: Decision Tree
+    - Model Ensemble Bagging: Random Forest
+    - Model Ensemble Voting : Logistic Regression, KNN, dan Decision Tree
+    - Feature Selection dengan threshold 0.01%
+
+5.  - Model Konvensional: Decision Tree
+    - Model Ensemble Bagging: Random Forest
+    - Model Ensemble Voting : Logistic Regression, KNN, dan Decision Tree
+    - Tidak menggunakan feature scaling
