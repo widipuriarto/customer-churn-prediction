@@ -1,4 +1,0 @@
-Progress 2:
-Sampai Modelling with Preprocessing
-
-https://github.com/widipuriarto/customer-churn-prediction
