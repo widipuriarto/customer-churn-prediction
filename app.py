@@ -20,12 +20,12 @@ st.markdown("""
     <style>
     .main { background-color: #f4f7f6; }
     h1 { color: #1e3799; text-align: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 800;}
-    h2 { color: #2f3542; border-bottom: 2px solid #7bed9f; padding-bottom: 10px;}
+    h2 { color: #2f3542; padding-bottom: 10px;}
     .subtitle { text-align: center; color: #57606f; font-size: 1.3rem; margin-bottom: 2rem; font-style: italic;}
     .stButton>button { width: 100%; font-weight: bold; background-color: #1e3799; color: white; border-radius: 10px; padding: 10px; font-size: 1.1rem; border: none; transition: 0.3s;}
     .stButton>button:hover { background-color: #4a69bd; box-shadow: 0px 4px 15px rgba(0,0,0,0.2); transform: scale(1.02); }
-    .safe-box { padding: 25px; border-radius: 15px; background: linear-gradient(135deg, #d4edda 0%, #a3d9a5 100%); color: #155724; text-align: center; border: 2px solid #c3e6cb; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
-    .danger-box { padding: 25px; border-radius: 15px; background: linear-gradient(135deg, #f8d7da 0%, #f5b7b1 100%); color: #721c24; text-align: center; border: 2px solid #f5c6cb; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+    .safe-box { padding: 25px; border-radius: 12px; background-color: #E8F5E9; color: #2E7D32; text-align: center; border: 1px solid #A5D6A7; margin-top: 20px;}
+    .danger-box { padding: 25px; border-radius: 12px; background-color: #FFEBEE; color: #C62828; text-align: center; border: 1px solid #EF9A9A; margin-top: 20px;}
     .info-box { background-color: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 5px solid #1e3799;}
     </style>
 """, unsafe_allow_html=True)
@@ -100,7 +100,7 @@ with tab1:
                 if hasattr(model, "predict_proba"):
                     probabilitas = model.predict_proba(input_data)[0]
                     prob_churn = probabilitas[1] * 100
-                    prob_text = f" dengan tingkat keyakinan AI sebesar <b>{prob_churn:.1f}%</b>"
+                    prob_text = f" <b>{prob_churn:.1f}%</b>"
                 else:
                     prob_text = ""
             
@@ -110,44 +110,20 @@ with tab1:
             with col_utama:
                 st.markdown("<h3 style='text-align: center;'>Hasil Prediksi</h3><br>", unsafe_allow_html=True)
                 
-                # --- Layout 2 Kolom untuk Hasil & Grafik ---
-                col_hasil, col_grafik = st.columns([1.2, 1])
-                
-                with col_hasil:
-                    if prediksi == 1:
-                        st.markdown(f"""
-                            <div class="danger-box" style="height: 100%; min-height: 250px; display: flex; flex-direction: column; justify-content: center; margin-top: 0; padding: 15px;">
-                                <h2 style="color: #721c24; font-size: 22px; margin-bottom: 10px;">⚠️ RISIKO TINGGI (CHURN)</h2>
-                                <p style="font-size: 1.1rem; margin: 0;">Pelanggan ini diklasifikasikan sebagai <b>BERISIKO MENINGGALKAN LAYANAN</b>{prob_text}.</p>
-                            </div>
-                        """, unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"""
-                            <div class="safe-box" style="height: 100%; min-height: 250px; display: flex; flex-direction: column; justify-content: center; margin-top: 0; padding: 15px;">
-                                <h2 style="color: #155724; font-size: 22px; margin-bottom: 10px;">✅ AMAN (LOYAL CUSTOMER)</h2>
-                                <p style="font-size: 1.1rem; margin: 0;">Pelanggan ini diklasifikasikan sebagai <b>SETIA & AKTIF</b>{prob_text}.</p>
-                            </div>
-                        """, unsafe_allow_html=True)
-
-                with col_grafik:
-                    if hasattr(model, "predict_proba"):
-                        fig, ax = plt.subplots(figsize=(3.5, 3.5))
-                        fig.patch.set_facecolor('#f4f7f6') 
-                        
-                        sizes = [probabilitas[0] * 100, probabilitas[1] * 100]
-                        labels = ['Aman (Active)', 'Berisiko (Churn)']
-                        colors = ['#55efc4', '#ff7675'] 
-                        explode = (0.05, 0.05) 
-                        
-                        wedges, texts, autotexts = ax.pie(
-                            sizes, explode=explode, labels=labels, colors=colors, 
-                            autopct='%1.1f%%', pctdistance=0.55, startangle=90, 
-                            textprops=dict(color="#2f3542", fontweight="bold", fontsize=11)
-                        )
-                        
-                        ax.axis('equal')
-                        plt.tight_layout()
-                        st.pyplot(fig)
+                if prediksi == 1:
+                    st.markdown(f"""
+                        <div class="danger-box" style="margin-top: 0; padding: 15px;">
+                            <h2 style="color: #C62828; font-size: 32px; margin-bottom: 5px;">CHURN</h2>
+                            <p style="font-size: 1.1rem; margin: 0;">Probabilitas:{prob_text}</p>
+                        </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    st.markdown(f"""
+                        <div class="safe-box" style="margin-top: 0; padding: 15px;">
+                            <h2 style="color: #2E7D32; font-size: 32px; margin-bottom: 5px;">TIDAK CHURN</h2>
+                            <p style="font-size: 1.1rem; margin: 0;">Probabilitas:{prob_text}</p>
+                        </div>
+                    """, unsafe_allow_html=True)
                 
         except Exception as e:
             st.error(f"Terjadi kesalahan saat memprediksi: {e}")

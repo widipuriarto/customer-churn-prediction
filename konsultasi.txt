@@ -1,0 +1,47 @@
+tanya tentang tampilan web.
+
+- menampilkan source code
+- terdapat banyak missing value
+- distribusi kelas tidak seimbang
+- terdapat 20 fitur numerik dan 10 fitur kategorikal
+- model yang digunakan :
+    Model Konvensional: Decision Tree
+    Model Ensemble Bagging: Random Forest
+    Model Ensemble Voting : Logistic Regression, KNN, dan Decision Tree
+
+
+pada  tahap direct modelling:
+- dilakukan penghapusan Nan
+- hanya memakai fitur numerik berjumlah 20
+- membuang fitur kategorikal
+
+pada tahap data preprocessing:
+- memakai 30 fitur
+- melakukan fitur engineering:
+    tenure = hari ini - tanggal daftar
+    recency = hari ini - tanggal pembelian terakhir
+- membuang kolom yang tidak relevan
+    customer_id
+    signup_date
+    last_purchase_date
+- jumlah fitur menjadi 29
+- mengisi kolom missing value dengan median:
+    age,
+    total_spent,
+    satisfaction_score
+- mengisi kolom missing value dengan modus:
+    gender
+- menangani outlier dengan metode clipping/capping
+- melakukan encoding fitur kategorikal:
+    subscription_type (Label Encoding)
+    gender, country, city, acquisition_channel, device_type, coupon_code, payment_method (One Hot Encoding)
+- feature scaling dengan StandardScalar pada kolom numerik
+- penerapan oversampling dengan SMOTE Tomek
+
+modelling dengan preprocessing
+
+hyperparameter tuning
+- feature importance berdasarkan model decision tree
+- menyeleksi top 9 feature importance
+- menggunakan 9 fitur untuk dilatih
+- tuning ketiga model dengan randomized search CV dengan cv 10
