@@ -50,7 +50,7 @@ except Exception as e:
     st.stop()
 
 # Membuat Sistem Tab agar Profesional
-tab1, tab2, tab3 = st.tabs(["🔮 Prediksi Interaktif", "📖 Dokumentasi Proyek", "📊 Wawasan Data & Fitur"])
+tab1, tab2, tab3 = st.tabs(["🔮 Prediksi Interaktif", "📊 Wawasan Data & Fitur", "🛤️ Flowchart"])
 
 # =====================================================================
 # TAB 1: PREDIKSI INTERAKTIF (FORM UTAMA)
@@ -96,13 +96,6 @@ with tab1:
         try:
             with st.spinner("🧠 AI Decision Tree sedang menyusuri percabangan pohon logika..."):
                 prediksi = model.predict(input_data)[0]
-                
-                if hasattr(model, "predict_proba"):
-                    probabilitas = model.predict_proba(input_data)[0]
-                    prob_churn = probabilitas[1] * 100
-                    prob_text = f" <b>{prob_churn:.1f}%</b>"
-                else:
-                    prob_text = ""
             
             # --- Layout Terpusat yang Lebih Kecil ---
             col_space_kiri, col_utama, col_space_kanan = st.columns([1, 4, 1])
@@ -111,17 +104,15 @@ with tab1:
                 st.markdown("<h3 style='text-align: center;'>Hasil Prediksi</h3><br>", unsafe_allow_html=True)
                 
                 if prediksi == 1:
-                    st.markdown(f"""
+                    st.markdown("""
                         <div class="danger-box" style="margin-top: 0; padding: 15px;">
-                            <h2 style="color: #C62828; font-size: 32px; margin-bottom: 5px;">CHURN</h2>
-                            <p style="font-size: 1.1rem; margin: 0;">Probabilitas:{prob_text}</p>
+                            <h2 style="color: #C62828; font-size: 32px; margin-bottom: 0px;">CHURN</h2>
                         </div>
                     """, unsafe_allow_html=True)
                 else:
-                    st.markdown(f"""
+                    st.markdown("""
                         <div class="safe-box" style="margin-top: 0; padding: 15px;">
-                            <h2 style="color: #2E7D32; font-size: 32px; margin-bottom: 5px;">TIDAK CHURN</h2>
-                            <p style="font-size: 1.1rem; margin: 0;">Probabilitas:{prob_text}</p>
+                            <h2 style="color: #2E7D32; font-size: 32px; margin-bottom: 0px;">TIDAK CHURN</h2>
                         </div>
                     """, unsafe_allow_html=True)
                 
@@ -129,41 +120,11 @@ with tab1:
             st.error(f"Terjadi kesalahan saat memprediksi: {e}")
 
 # =====================================================================
-# TAB 2: DESKRIPSI PROYEK & PIPELINE MODEL
+# TAB 2: WAWASAN DATA & VISUALISASI FITUR
 # =====================================================================
 with tab2:
-    st.markdown("## 📖 Latar Belakang Proyek")
-    st.write("""
-    Dalam industri modern, **biaya untuk mendapatkan pelanggan baru (Customer Acquisition Cost) bisa 5 hingga 25 kali lipat lebih mahal daripada mempertahankan pelanggan yang sudah ada**. 
-    Proyek ini dibangun untuk menyelesaikan masalah tersebut dengan menggunakan kecerdasan buatan (Machine Learning) guna mendeteksi tanda-tanda awal pelanggan yang berencana untuk pergi (*Customer Churn*).
-    """)
-    
-    st.markdown("## ⚙️ Arsitektur Sistem AI (Pipeline)")
-    st.markdown("""
-    Aplikasi web ini ditenagai oleh model Machine Learning yang telah melewati proses riset saintifik yang sangat ketat di *Jupyter Notebook*, meliputi:
-    """)
-    
-    col_a, col_b = st.columns(2)
-    with col_a:
-        st.info("**1. Data Preprocessing & Cleansing**")
-        st.write("Penghapusan data *outlier*, pengisian nilai kosong (missing values), dan *Label Encoding* untuk mengubah data teks menjadi matriks numerik.")
-        
-        st.info("**2. Feature Selection (Ekstraksi Fitur VIP)**")
-        st.write("Dari puluhan variabel awal (53 kolom setelah *encoding*), kami menggunakan analisis *Decision Tree Feature Importance* untuk membuang variabel sampah (*noise*) dan mempertahankan **9 Metrik VIP** paling berpengaruh. Ini membuat model lebih ringan, cepat, dan mencegah *overfitting*.")
-        
-    with col_b:
-        st.info("**3. Hyperparameter Tuning**")
-        st.write("Model tidak hanya dilatih menggunakan parameter bawaan. Kami menggunakan teknik `RandomizedSearchCV` untuk mencari konfigurasi parameter terbaik (Tuning) secara matematis demi akurasi maksimal.")
-        
-        st.info("**4. Model Sang Juara (Tuned Decision Tree)**")
-        st.write("Berbeda dengan asumsi umum, model yang terpilih sebagai juara dalam eksperimen ini justru adalah *Decision Tree* tunggal yang telah di-tuning secara presisi. Model ini berhasil mencapai metrik **Recall luar biasa (99.3%)** dan **F1-Score tertinggi (0.67)**, mengalahkan algoritma *Ensemble* kompleks. Pohon keputusan yang ramping ini sangat tajam dalam mendeteksi hampir *semua* pelanggan yang berniat pergi (sensitivitas super tinggi).")
-
-# =====================================================================
-# TAB 3: WAWASAN DATA & VISUALISASI FITUR
-# =====================================================================
-with tab3:
-    st.markdown("## 📊 Anatomi 9 Fitur VIP")
-    st.write("Berikut adalah penjelasan mendalam tentang 9 fitur terpilih yang terbukti secara statistik paling memengaruhi keputusan pelanggan untuk churn berdasarkan analisa logika *Decision Tree*.")
+    st.markdown("## 📊 Penjelasan 9 Fitur Penting")
+    st.write("Berikut adalah penjelasan tentang 9 fitur terpilih yang terbukti secara statistik paling memengaruhi keputusan pelanggan untuk churn berdasarkan analisa logika *Decision Tree*.")
     
     # Ekstraksi Bobot Kepentingan Fitur secara DINAMIS dari model langsung!
     fitur_names = [
@@ -246,3 +207,14 @@ feature_importance_data = pd.DataFrame({
         - **Days Since Last Purchase**: Jeda hari yang semakin panjang menandakan menurunnya minat belanja (*dormancy*).
         - **Avg Order Value**: Rata-rata nominal per keranjang belanja. Menunjukkan daya beli dan kebiasaan transaksi.
         """)
+
+# =====================================================================
+# TAB 3: FLOWCHART ALUR KERJA
+# =====================================================================
+with tab3:
+    st.markdown("## 🛤️ Flowchart Arsitektur Proyek")
+    st.write("Visualisasi langkah demi langkah dari proses pengolahan data mentah hingga menjadi prediksi Machine Learning.")
+    try:
+        st.image("flowchart.png", use_container_width=True, caption="Alur Kerja Customer Churn Prediction")
+    except FileNotFoundError:
+        st.error("⚠️ File 'flowchart.png' tidak ditemukan di direktori saat ini.")
